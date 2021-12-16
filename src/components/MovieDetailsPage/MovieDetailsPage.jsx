@@ -1,49 +1,37 @@
-import PropTypes from 'prop-types';
 import * as api from 'services/movie-api';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import s from './MovieDetailsPage.module.css';
-import { Link, useLocation, useParams, useRouteMatch } from 'react-router-dom';
+import {
+  Link,
+  useHistory,
+  useLocation,
+  useParams,
+  useRouteMatch,
+} from 'react-router-dom';
 import { nanoid } from 'nanoid';
 
 const MovieDetailsPage = () => {
-  const [movie, setMovie] = useState({});
-  const [isCastsShown, setCastsShown] = useState(false);
-  const [isReviewsShown, setReviewsShown] = useState(false);
+  const [movie, setMovie] = useState(null);
   const [casts, setCasts] = useState([]);
   const [reviews, setReviews] = useState([]);
-  const isMounted = useRef(false);
-  // const location = useLocation();
-  // console.log('location -->', location);
+  const location = useLocation();
+  const history = useHistory();
   const match = useRouteMatch();
   const { id } = useParams();
 
   useEffect(() => {
-    api
-      .fetchMovie(id)
-      .then(setMovie)
-      .then(() => (isMounted.current = true))
-      .catch(console.log);
+    api.fetchMovie(id).then(setMovie).catch(console.log);
   }, []);
 
+  const handleBack = () => {
+    history.push(location.state.from);
+  };
+
   const showCasts = () =>
-    api
-      .fetchCasts(movie.id)
-      .then(setCasts)
-      .catch(console.log)
-      .finally(() => {
-        setCastsShown(true);
-        setReviewsShown(false);
-      });
+    api.fetchCasts(movie.id).then(setCasts).catch(console.log);
 
   const showReviews = () =>
-    api
-      .fetchReviews(movie.id)
-      .then(setReviews)
-      .catch(console.log)
-      .finally(() => {
-        setCastsShown(false);
-        setReviewsShown(true);
-      });
+    api.fetchReviews(movie.id).then(setReviews).catch(console.log);
 
   const getCastsMarkup = () => {
     if (!casts.length) {
@@ -79,10 +67,24 @@ const MovieDetailsPage = () => {
     );
   };
 
+  const toCasts = {
+    pathname: `${match.url}/casts`,
+    state: { from: location.state ? location.state.from : '/' },
+  };
+
+  const toReviews = {
+    pathname: `${match.url}/reviews`,
+    state: { from: location.state ? location.state.from : '/' },
+  };
+
   return (
-    isMounted && (
+    movie && (
       <section className={s.page}>
-        <Link to={'/'}>Back</Link>
+        {location.state && (
+          <button type={'button'} onClick={handleBack}>
+            Back
+          </button>
+        )}
         <div className={s.headWrapper}>
           <img className={s.poster} src={movie.poster} alt={'poster'} />
           <div>
@@ -93,22 +95,20 @@ const MovieDetailsPage = () => {
             <h4>Genre</h4>
             <p>{movie.genre}</p>
             <div className={s.linksWrapper}>
-              <Link to={`${match.url}/casts`} onClick={showCasts}>
+              <Link to={toCasts} onClick={showCasts}>
                 Casts
               </Link>
-              <Link to={`${match.url}/reviews`} onClick={showReviews}>
+              <Link to={toReviews} onClick={showReviews}>
                 Reviews
               </Link>
             </div>
           </div>
         </div>
-        {isCastsShown && getCastsMarkup()}
-        {isReviewsShown && getReviewsMarkup()}
+        {location.pathname.includes('casts') && getCastsMarkup()}
+        {location.pathname.includes('reviews') && getReviewsMarkup()}
       </section>
     )
   );
 };
-
-MovieDetailsPage.propTypes = {};
 
 export default MovieDetailsPage;
