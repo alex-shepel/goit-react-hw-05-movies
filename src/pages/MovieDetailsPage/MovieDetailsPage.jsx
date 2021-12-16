@@ -8,7 +8,8 @@ import {
   useParams,
   useRouteMatch,
 } from 'react-router-dom';
-import { nanoid } from 'nanoid';
+import Cast from 'components/Cast';
+import Reviews from 'components/Reviews';
 
 const MovieDetailsPage = () => {
   const [movie, setMovie] = useState(null);
@@ -33,40 +34,6 @@ const MovieDetailsPage = () => {
   const showReviews = () =>
     api.fetchReviews(movie.id).then(setReviews).catch(console.log);
 
-  const getCastsMarkup = () => {
-    if (!casts.length) {
-      return <p>There are no cast information yet...</p>;
-    }
-    return (
-      <ul className={s.list}>
-        {casts.map(actor => (
-          <li className={s.cast} key={nanoid()}>
-            <img src={actor.photo} alt={'actor photo'} height={100} />
-            <span>
-              <b>{actor.name}</b> as {actor.hero}
-            </span>
-          </li>
-        ))}
-      </ul>
-    );
-  };
-
-  const getReviewsMarkup = () => {
-    if (!reviews.length) {
-      return <p>There are no reviews yet...</p>;
-    }
-    return (
-      <ul className={s.list}>
-        {reviews.map(review => (
-          <li key={nanoid()}>
-            <h4>{review.author}</h4>
-            <p>{review.content}</p>
-          </li>
-        ))}
-      </ul>
-    );
-  };
-
   const toCasts = {
     pathname: `${match.url}/casts`,
     state: { from: location.state ? location.state.from : '/' },
@@ -75,6 +42,20 @@ const MovieDetailsPage = () => {
   const toReviews = {
     pathname: `${match.url}/reviews`,
     state: { from: location.state ? location.state.from : '/' },
+  };
+
+  const getReviewsMarkup = () => {
+    if (!reviews.length) {
+      return <p>There are no reviews yet...</p>;
+    }
+    return <Reviews reviews={reviews} />;
+  };
+
+  const getCastsMarkup = () => {
+    if (!casts.length) {
+      return <p>There are no cast information yet...</p>;
+    }
+    return <Cast actors={casts} />;
   };
 
   return (

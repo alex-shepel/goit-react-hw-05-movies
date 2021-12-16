@@ -1,9 +1,10 @@
 import * as api from 'services/movie-api';
-import { useState } from 'react';
-import { Route, Switch, useLocation, useRouteMatch } from 'react-router-dom';
+import { lazy, useState } from 'react';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import MoviesList from 'components/MoviesList';
-import MovieDetailsPage from 'components/MovieDetailsPage';
 import Searchbar from 'components/Searchbar';
+
+const MovieDetailsPage = lazy(() => import('pages/MovieDetailsPage'));
 
 const MoviesPage = () => {
   const [movies, setMovies] = useState([]);

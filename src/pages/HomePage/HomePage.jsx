@@ -1,6 +1,6 @@
-import * as api from '../../services/movie-api';
+import * as api from 'services/movie-api';
 import { useEffect, useState } from 'react';
-import MoviesList from '../MoviesList/MoviesList';
+import MoviesList from 'components/MoviesList';
 
 const HomePage = () => {
   const [movies, setMovies] = useState([]);
