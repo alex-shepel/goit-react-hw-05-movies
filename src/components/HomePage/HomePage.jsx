@@ -1,6 +1,6 @@
-import { NavLink } from 'react-router-dom';
 import * as api from '../../services/movie-api';
 import { useEffect, useState } from 'react';
+import MoviesList from '../MoviesList/MoviesList';
 
 const HomePage = () => {
   const [movies, setMovies] = useState([]);
@@ -9,18 +9,7 @@ const HomePage = () => {
     api.fetchTrending().then(setMovies).catch(console.log);
   }, []);
 
-  console.log('movies -->', movies);
-
-  return (
-    <ul>
-      {movies.map(item => (
-        <li key={item.id}>
-          {/*<NavLink to="/movies/:id">{item.title}</NavLink>*/}
-          {item.title}
-        </li>
-      ))}
-    </ul>
-  );
+  return <MoviesList movies={movies} />;
 };
 
 export default HomePage;

@@ -1,5 +1,10 @@
-const useToggle = (init = false) => {
-  const [state, useState] = useState(init);
+import { useState, useDebugValue } from 'react';
 
-  useEffect();
+const useToggle = (init = false) => {
+  const [state, setState] = useState(init);
+  const toggleState = () => setState(state => !state);
+  useDebugValue(state);
+  return [state, toggleState];
 };
+
+export default useToggle;
