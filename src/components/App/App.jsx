@@ -1,5 +1,5 @@
 import Navbar from 'components/Navbar';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import s from './App.module.css';
 import { lazy, Suspense } from 'react';
 
@@ -18,6 +18,7 @@ const App = () => {
           <Route path="/movies">
             <MoviesPage />
           </Route>
+          <Redirect to={'/'} />
         </Switch>
       </Suspense>
     </div>
