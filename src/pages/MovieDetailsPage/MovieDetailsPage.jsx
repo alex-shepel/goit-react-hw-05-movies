@@ -1,5 +1,6 @@
 import * as api from 'services/movie-api';
 import { useEffect, useState } from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import s from './MovieDetailsPage.module.css';
 import {
   Link,
@@ -21,7 +22,13 @@ const MovieDetailsPage = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    api.fetchMovie(id).then(setMovie).catch(console.log);
+    api
+      .fetchMovie(id)
+      .then(setMovie)
+      .catch(err => {
+        history.replace('/movies');
+        console.log(err);
+      });
   }, []);
 
   const handleBack = () => {
@@ -85,8 +92,16 @@ const MovieDetailsPage = () => {
             </div>
           </div>
         </div>
-        {location.pathname.includes('casts') && getCastsMarkup()}
-        {location.pathname.includes('reviews') && getReviewsMarkup()}
+
+        <Switch>
+          <Route exact path={`${match.url}/casts`}>
+            {getCastsMarkup()}
+          </Route>
+          <Route exact path={`${match.url}/reviews`}>
+            {getReviewsMarkup()}
+          </Route>
+          <Redirect to={match.url} />
+        </Switch>
       </section>
     )
   );
