@@ -24,12 +24,6 @@ const fetchSearch = async query => {
   }));
 };
 
-const fetchGenres = async () => {
-  const RES = 'genre/movie/list';
-  const { data } = await axios.get(RES);
-  return data.genres;
-};
-
 const fetchMovie = async id => {
   const RES = 'movie/';
   const { data } = await axios.get(RES + id);
