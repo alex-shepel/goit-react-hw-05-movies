@@ -1,5 +1,5 @@
 import * as api from 'services/movie-api';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import s from './MovieDetailsPage.module.css';
 import {
@@ -9,8 +9,9 @@ import {
   useParams,
   useRouteMatch,
 } from 'react-router-dom';
-import Cast from 'components/Cast';
-import Reviews from 'components/Reviews';
+
+const Cast = lazy(() => import('components/Cast'));
+const Reviews = lazy(() => import('components/Reviews'));
 
 const MovieDetailsPage = () => {
   const [movie, setMovie] = useState(null);
@@ -94,12 +95,14 @@ const MovieDetailsPage = () => {
         </div>
 
         <Switch>
-          <Route exact path={`${match.url}/casts`}>
-            {getCastsMarkup()}
-          </Route>
-          <Route exact path={`${match.url}/reviews`}>
-            {getReviewsMarkup()}
-          </Route>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Route exact path={`${match.url}/casts`}>
+              {getCastsMarkup()}
+            </Route>
+            <Route exact path={`${match.url}/reviews`}>
+              {getReviewsMarkup()}
+            </Route>
+          </Suspense>
           <Redirect to={match.url} />
         </Switch>
       </section>

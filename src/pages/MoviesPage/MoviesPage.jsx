@@ -1,5 +1,5 @@
 import * as api from 'services/movie-api';
-import { lazy, useState } from 'react';
+import { lazy, useState, Suspense } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import MoviesList from 'components/MoviesList';
 import Searchbar from 'components/Searchbar';
@@ -20,9 +20,11 @@ const MoviesPage = () => {
         <Searchbar onSubmit={handleSubmit} />
         <MoviesList movies={movies} />
       </Route>
-      <Route path={`${path}/:id`}>
-        <MovieDetailsPage />
-      </Route>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Route path={`${path}/:id`}>
+          <MovieDetailsPage />
+        </Route>
+      </Suspense>
     </Switch>
   );
 };
