@@ -10,8 +10,12 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
-const Cast = lazy(() => import('components/Cast'));
-const Reviews = lazy(() => import('components/Reviews'));
+const Cast = lazy(() =>
+  import('components/Cast' /* webpackChunkName: "Cast" */),
+);
+const Reviews = lazy(() =>
+  import('components/Reviews' /* webpackChunkName: "Reviews" */),
+);
 
 const MovieDetailsPage = () => {
   const [movie, setMovie] = useState(null);

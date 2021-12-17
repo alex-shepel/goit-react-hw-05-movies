@@ -4,7 +4,9 @@ import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import MoviesList from 'components/MoviesList';
 import Searchbar from 'components/Searchbar';
 
-const MovieDetailsPage = lazy(() => import('pages/MovieDetailsPage'));
+const MovieDetailsPage = lazy(() =>
+  import('pages/MovieDetailsPage' /* webpackChunkName: "MovieDetailsPage" */),
+);
 
 const MoviesPage = () => {
   const [movies, setMovies] = useState([]);

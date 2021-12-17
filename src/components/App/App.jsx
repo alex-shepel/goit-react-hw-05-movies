@@ -3,8 +3,12 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import s from './App.module.css';
 import { lazy, Suspense } from 'react';
 
-const HomePage = lazy(() => import('pages/HomePage'));
-const MoviesPage = lazy(() => import('pages/MoviesPage'));
+const HomePage = lazy(() =>
+  import('pages/HomePage' /* webpackChunkName: "HomePage" */),
+);
+const MoviesPage = lazy(() =>
+  import('pages/MoviesPage' /* webpackChunkName: "MoviesPage" */),
+);
 
 const App = () => {
   return (
